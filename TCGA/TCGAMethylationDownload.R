@@ -32,15 +32,23 @@ library("tidyr")
 library("openssl")
 
 BigQuerySQL_start_end <- paste(
-"SELECT methyl.sample_barcode, beta_value",
-"FROM",
-  "`isb-cgc.TCGA_hg38_data_v0.DNA_Methylation_chr21` methyl",
-"JOIN",
-  "`isb-cgc.TCGA_bioclin_v0.Biospecimen` bs",
-"ON",
-  "methyl.sample_barcode = bs.sample_barcode",
-"WHERE",
-  "bs.project_short_name ='TCGA-COAD'"                         
+"SELECT methyl.sample_barcode, methyl.probe_id, methyl.beta_value, annotate.CpG_island_coord, annotate.chromosome, annotate.position, annotate.CGI_feature_type, clin.gender, clin.ethnicity
+FROM
+  `isb-cgc.TCGA_hg38_data_v0.DNA_Methylation_chr21` methyl
+JOIN
+  `isb-cgc.TCGA_bioclin_v0.Biospecimen` bs
+ON
+  methyl.sample_barcode = bs.sample_barcode
+JOIN
+  `isb-cgc.TCGA_bioclin_v0.Clinical` clin
+ON
+  methyl.case_barcode = clin.case_barcode
+JOIN
+  `isb-cgc.platform_reference.GDC_hg38_methylation_annotation` annotate
+ON 
+  methyl.probe_id = annotate.CpG_probe_id
+WHERE
+  bs.project_short_name ='TCGA-COAD'"                         
 )
 
 
