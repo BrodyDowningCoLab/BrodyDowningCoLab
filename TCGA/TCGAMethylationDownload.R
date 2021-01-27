@@ -10,6 +10,8 @@ if (!requireNamespace("ggplot2", quietly = TRUE))
     install.packages("ggplot2")
 if (!requireNamespace("openssl", quietly = TRUE))
     install.packages("openssl")
+if (!requireNamespace("data.table", quietly = TRUE))
+  install.packages("data.table")
     
 #
 #
@@ -24,15 +26,16 @@ project<- "symbolic-rope-182022"
 
 
 
-library("dplyr")
-library("h2o")
-library("bigrquery")
-library("ggplot2")
-library("tidyr")
-library("openssl")
+library(dplyr)
+library(h2o)
+library(bigrquery)
+library(ggplot2)
+library(tidyr)
+library(openssl)
+library(data.table)
 
 BigQuerySQL_start_end <- paste(
-"SELECT methyl.sample_barcode, methyl.probe_id, methyl.beta_value, annotate.CpG_island_coord, annotate.chromosome, annotate.position, annotate.CGI_feature_type, clin.gender, clin.ethnicity
+"SELECT methyl.sample_barcode, methyl.probe_id, methyl.beta_value, annotate.CpG_island_coord, annotate.chromosome, annotate.position, annotate.CGI_feature_type, clin.gender, clin.ethnicity, cnv.chromosome, cnv.start_pos, cnv.end_pos, cnv.segment_mean
 FROM
   `isb-cgc.TCGA_hg38_data_v0.DNA_Methylation_chr21` methyl
 JOIN
@@ -44,6 +47,10 @@ JOIN
 ON
   methyl.case_barcode = clin.case_barcode
 JOIN
+  `isb-cgc.TCGA_hg38_data_v0.Copy_Number_Segment_Masked_r14` cnv
+ON
+  methyl.sample_barcode = cnv.sample_barcode
+JOIN
   `isb-cgc.platform_reference.GDC_hg38_methylation_annotation` annotate
 ON 
   methyl.probe_id = annotate.CpG_probe_id
@@ -54,4 +61,9 @@ WHERE
 
 #Get the data
 TCGA_DNA_Methylation <- bq_project_query(project, BigQuerySQL_start_end)
-data <- bq_table_download(TCGA_DNA_Methylation)
+data <- bq_table_download(TCGA_DNA_Methylation, page_size = 100000000)
+system.time(
+  fwrite(data, "/home/data/Shared/TCGA/TCGA_COAD_Methylation_CNV_Chr21.csv", sep = ",", col.names = TRUE)
+  )
+
+rm(data)
