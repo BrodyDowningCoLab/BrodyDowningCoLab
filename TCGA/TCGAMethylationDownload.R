@@ -34,22 +34,19 @@ library(tidyr)
 library(openssl)
 library(data.table)
 
+###Get Methylation Data ###
 BigQuerySQL_start_end <- paste(
-"SELECT methyl.sample_barcode, methyl.probe_id, methyl.beta_value, annotate.CpG_island_coord, annotate.chromosome, annotate.position, annotate.CGI_feature_type, clin.gender, clin.ethnicity, cnv.chromosome, cnv.start_pos, cnv.end_pos, cnv.segment_mean
+"SELECT bs.case_barcode, methyl.sample_barcode, bs.sample_type, methyl.probe_id, methyl.beta_value, annotate.CpG_island_coord, annotate.chromosome, annotate.position, annotate.CGI_feature_type, clin.gender, clin.ethnicity
 FROM
-  `isb-cgc.TCGA_hg38_data_v0.DNA_Methylation_chr21` methyl
-JOIN
   `isb-cgc.TCGA_bioclin_v0.Biospecimen` bs
+JOIN
+  `isb-cgc.TCGA_hg38_data_v0.DNA_Methylation_chr1` methyl
 ON
-  methyl.sample_barcode = bs.sample_barcode
+  bs.sample_barcode = methyl.sample_barcode
 JOIN
   `isb-cgc.TCGA_bioclin_v0.Clinical` clin
 ON
-  methyl.case_barcode = clin.case_barcode
-JOIN
-  `isb-cgc.TCGA_hg38_data_v0.Copy_Number_Segment_Masked_r14` cnv
-ON
-  methyl.sample_barcode = cnv.sample_barcode
+  bs.case_barcode = clin.case_barcode
 JOIN
   `isb-cgc.platform_reference.GDC_hg38_methylation_annotation` annotate
 ON 
@@ -58,12 +55,35 @@ WHERE
   bs.project_short_name ='TCGA-COAD'"                         
 )
 
-
 #Get the data
 TCGA_DNA_Methylation <- bq_project_query(project, BigQuerySQL_start_end)
 data <- bq_table_download(TCGA_DNA_Methylation, page_size = 100000000)
 system.time(
-  fwrite(data, "/home/data/Shared/TCGA/TCGA_COAD_Methylation_CNV_Chr21.csv", sep = ",", col.names = TRUE)
+  fwrite(data, "/home/data/Shared/TCGA/TCGA_COAD_Methylation_Chr1.csv", sep = ",", col.names = TRUE)
   )
+
+
+
+###Get CNV Data ###
+
+BigQuerySQL_start_end_cnv <- paste(
+  "SELECT bs.case_barcode, cnv.sample_barcode, bs.sample_type, cnv.chromosome, cnv.start_pos, cnv.end_pos, cnv.segment_mean
+FROM
+  `isb-cgc.TCGA_bioclin_v0.Biospecimen` bs
+JOIN
+  `isb-cgc.TCGA_hg38_data_v0.Copy_Number_Segment_Masked_r14` cnv
+ON
+  bs.sample_barcode = cnv.sample_barcode
+WHERE
+  bs.project_short_name ='TCGA-COAD'"                         
+)
+
+
+#Get the data
+TCGA_DNA_CNV <- bq_project_query(project, BigQuerySQL_start_end_cnv)
+data <- bq_table_download(TCGA_DNA_CNV, page_size = 100000000)
+system.time(
+  fwrite(data, "/home/data/Shared/TCGA/TCGA_COAD_CNV.csv", sep = ",", col.names = TRUE)
+)
 
 rm(data)
