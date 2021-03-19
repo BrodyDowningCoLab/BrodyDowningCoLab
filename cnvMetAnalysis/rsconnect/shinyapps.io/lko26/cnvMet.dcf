@@ -1,0 +1,13 @@
+name: cnvMet
+title: cnvMet
+username:
+account: lko26
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 3347238
+bundleId: 4351683
+url: https://lko26.shinyapps.io/cnvMet/
+when: 1615879675.50853
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: .RData|10MB_downstream_auc.rds|50_unmasked_varimp.rds|clinicalData.rds|cnv_comb_auc.rds|cnv_up_downstream_auc.rds|cnv_up_downstream_rocPlot.rds|coad_DMR.csv|coad_Only_cnv_up_downstream_rocPlot.rds|coadOnly_cnv_up_downstream_auc.rds|comb_glm_rocPlot.rds|comb_rocPlot.rds|intersected_0.2DMRs_top100CNVs.BED|intersected_0.2DMRs_top100CNVs.csv|intersected_DMRs_top100CNVs.csv|masked_top100_cnv_coad.csv|met_gene.R|metDat.rds|Potential Colon Cancer DMRs - Sources.csv|ref_clean.py
