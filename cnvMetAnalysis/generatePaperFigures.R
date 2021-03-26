@@ -69,7 +69,7 @@ gp_clean1up2up <- ggplot(subset(result, Model_Type %in% c("1 CNV upstream", "2 C
   geom_boxplot( fill="white", notch=FALSE) +
   geom_jitter( size=1, color="black", width=0.3) +
   #scale_y_discrete(breaks = c(0.50, 0.51,0.52, 0.53, 0.54, 0.55, 0.56, 0.57, 0.58, 0.59, 0.60, 0.61, 0.62, 0.63, 0.64)) +
-  ggtitle("Comparison of Clean Versus Upstream and Downstream Methylation Beta Values COAD Predictions") + 
+  ggtitle("Comparison of 1 CNV Upstream Versus 2 CNVs Upstream Methylation Beta Values COAD Predictions") + 
   xlab("CNV Location") + ylab("AUC of Predictions") +
   theme(plot.title = element_text(size = 18, face = "bold"), 
         legend.position = "none",
@@ -82,7 +82,7 @@ gp_clean1down2down <- ggplot(subset(result, Model_Type %in% c("1 CNV downstream"
   geom_boxplot( fill="white", notch=FALSE) +
   geom_jitter( size=1, color="black", width=0.3) +
   #scale_y_discrete(breaks = c(0.50, 0.51,0.52, 0.53, 0.54, 0.55, 0.56, 0.57, 0.58, 0.59, 0.60, 0.61, 0.62, 0.63, 0.64)) +
-  ggtitle("Comparison of Clean Versus Upstream and Downstream Methylation Beta Values COAD Predictions") + 
+  ggtitle("Comparison of 1 CNV Downstream Versus 2 CNVs Downstream Methylation Beta Values COAD Predictions") + 
   xlab("CNV Location") + ylab("AUC of Predictions") +
   theme(plot.title = element_text(size = 18, face = "bold"), 
         legend.position = "none",
@@ -95,7 +95,7 @@ gp_clean1up1down2up2down <- ggplot(subset(result, Model_Type %in% c("1 CNV downs
   geom_boxplot( fill="white", notch=FALSE) +
   geom_jitter( size=1, color="black", width=0.3) +
   #scale_y_discrete(breaks = c(0.50, 0.51,0.52, 0.53, 0.54, 0.55, 0.56, 0.57, 0.58, 0.59, 0.60, 0.61, 0.62, 0.63, 0.64)) +
-  ggtitle("Comparison of Clean Versus Upstream and Downstream Methylation Beta Values COAD Predictions") + 
+  ggtitle("Comparison of 1 CNV & 2 CNVs Upstream Versus 1 CNV & 2 CNVs Downstream Methylation Beta Values COAD Predictions") + 
   xlab("CNV Location") + ylab("AUC of Predictions") +
   theme(plot.title = element_text(size = 18, face = "bold"), 
         legend.position = "none",
