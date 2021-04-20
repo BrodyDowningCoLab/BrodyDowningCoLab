@@ -39,27 +39,24 @@ result <- result %>%
 ## Generate plots ##
 ####################
 gp_cleanFull <- ggplot(subset(result, Model_Type %in% c("clean", "full")),
-             aes(x = CNV, y = AUC,  colour = interaction(Model_Type, CNV), group = CNV)) + facet_wrap( ~ Model_Type) +
-  geom_boxplot( fill="white", notch=FALSE) +
-  geom_jitter( size=1, color="black", width=0.3) +
-  #scale_y_discrete(breaks = c(0.50, 0.51,0.52, 0.53, 0.54, 0.55, 0.56, 0.57, 0.58, 0.59, 0.60, 0.61, 0.62, 0.63, 0.64)) +
+             aes(x = CNV, y = AUC,  fill=Model_Type)) +
+  geom_boxplot(position = position_dodge(1)) +
+  geom_dotplot(binaxis = 'y', stackdir = 'center', position = position_dodge(1)) +
   ggtitle("Comparison of Clean Versus Full CNV COAD Predictions") + 
   xlab("CNV Location") + ylab("AUC of Predictions") +
   theme(plot.title = element_text(size = 18, face = "bold"), 
-        legend.position = "none",
-        axis.text.x = element_text(angle = 90)) 
+        legend.position = "right",
+        axis.text.x = element_text(angle = 90))
 
 gp_cleanFull
 
 gp_clean1up1down <- ggplot(subset(result, Model_Type %in% c("clean", "1 CNV upstream", "1 CNV downstream")),
-                       aes(x = CNV, y = AUC,  colour = interaction(Model_Type, CNV), group = CNV)) + facet_wrap( ~ Model_Type) +
-  geom_boxplot( fill="white", notch=FALSE) +
-  geom_jitter( size=1, color="black", width=0.3) +
-  #scale_y_discrete(breaks = c(0.50, 0.51,0.52, 0.53, 0.54, 0.55, 0.56, 0.57, 0.58, 0.59, 0.60, 0.61, 0.62, 0.63, 0.64)) +
-  ggtitle("Comparison of Clean Versus Upstream and Downstream Methylation Beta Values COAD Predictions") + 
+                       aes(x = CNV, y = AUC,  fill = Model_Type)) + 
+  geom_boxplot() +
+  geom_jitter(binaxis = 'y', stackdir = 'center', position = position_dodge(1)) +ggtitle("Comparison of Clean Versus Upstream and Downstream Methylation Beta Values COAD Predictions") + 
   xlab("CNV Location") + ylab("AUC of Predictions") +
   theme(plot.title = element_text(size = 18, face = "bold"), 
-        legend.position = "none",
+        legend.position = "right",
         axis.text.x = element_text(angle = 90))
 
 gp_clean1up1down
