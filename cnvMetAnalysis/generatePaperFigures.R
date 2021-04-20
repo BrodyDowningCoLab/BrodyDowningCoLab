@@ -53,7 +53,8 @@ gp_cleanFull
 gp_clean1up1down <- ggplot(subset(result, Model_Type %in% c("clean", "1 CNV upstream", "1 CNV downstream")),
                        aes(x = CNV, y = AUC,  fill = Model_Type)) + 
   geom_boxplot() +
-  geom_jitter(binaxis = 'y', stackdir = 'center', position = position_dodge(1)) +ggtitle("Comparison of Clean Versus Upstream and Downstream Methylation Beta Values COAD Predictions") + 
+  geom_dotplot(binaxis = 'y', stackdir = 'center', position = position_dodge(0.75), dotsize = 0.5) +
+  ggtitle("Comparison of Clean Versus Upstream and Downstream Methylation Beta Values COAD Predictions") + 
   xlab("CNV Location") + ylab("AUC of Predictions") +
   theme(plot.title = element_text(size = 18, face = "bold"), 
         legend.position = "right",
